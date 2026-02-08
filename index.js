@@ -41,3 +41,34 @@ function displayBooks() {
 displayBooks();
 
 
+const newBookButton = document.getElementById("new-book-btn");
+const bookDialog = document.getElementById('book-dialog');
+const bookForm = document.getElementById('book-form');
+const cancelBtn = document.getElementById('cancel-btn');
+
+newBookButton.addEventListener('click', () => {
+    bookDialog.showModal()
+});
+
+bookForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+    const pages = document.getElementById('pages').value;
+    const read = document.getElementById('read').checked;
+
+    addBookToLibrary(title, author, pages, read);
+
+    displayBooks();
+
+    bookDialog.close();
+
+    bookForm.reset();
+
+});
+
+
+cancelBtn.addEventListener('click', () => {
+    bookDialog.close()
+})
