@@ -37,7 +37,7 @@ function displayBooks() {
             <p>Read: ${book.read ? 'Yes' : 'No'} </p>
             <p> Rating ${book.rating}/5 </p>
             <button class="remove-btn" data-id="${book.id}">Remove</button>
-            <button class = "toggle-read-btn">
+            <button class = "toggle-read-btn" data-id="${book.id}"> Toggle Read </button>
 
         `;
         
@@ -46,6 +46,8 @@ function displayBooks() {
     });
 
     setupRemoveButton();
+
+    setupReadButton();
 }
 
 displayBooks();
@@ -97,3 +99,19 @@ function setupRemoveButton(){
         });
     });
 }
+
+
+function setupReadButton(){
+    const readButton = document.querySelectorAll('.toggle-read-btn')
+
+    readButton.forEach(button => {
+        button.addEventListener('click', () => {
+            const bookId = button.dataset.id;
+            const book = myLibrary.find(book => book.id === bookId);
+            book.toggleRead();
+            displayBooks();
+
+        })
+    })
+}
+
