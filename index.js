@@ -1,21 +1,26 @@
 const myLibrary = [];
 
-function Book(title, author, pages, read) {
+function Book(title, author, pages, read, rating) {
     this.title = title
     this.author = author
     this.pages = pages
     this.read = read
+    this.rating = rating
     this.id = crypto.randomUUID()
 }
 
-function addBookToLibrary(title, author, pages, read) {
-    const book = new Book(title, author, pages, read)
+Book.prototype.toggleRead = function(){
+    this.read = !this.read
+}
+
+function addBookToLibrary(title, author, pages, read, rating) {
+    const book = new Book(title, author, pages, read, rating)
     myLibrary.push(book)
 }
 
-addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, true);
-addBookToLibrary("1984", "George Orwell", 328, false);
-addBookToLibrary("Pride and Prejudice", "Jane Austen", 432, true);
+addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, true, 4);
+addBookToLibrary("1984", "George Orwell", 328, false, 3);
+addBookToLibrary("Pride and Prejudice", "Jane Austen", 432, true, 5);
 
 function displayBooks() {
     const container = document.getElementById("library-container");
@@ -30,12 +35,17 @@ function displayBooks() {
             <p>Author ${book.author} </p>
             <p>Total Pages: ${book.pages} </p>
             <p>Read: ${book.read ? 'Yes' : 'No'} </p>
+            <p> Rating ${book.rating}/5 </p>
+            <button class="remove-btn" data-id="${book.id}">Remove</button>
+            <button class = "toggle-read-btn">
 
         `;
         
         container.appendChild(bookCards);
 
     });
+
+    setupRemoveButton();
 }
 
 displayBooks();
@@ -57,8 +67,9 @@ bookForm.addEventListener('submit', (event) => {
     const author = document.getElementById('author').value;
     const pages = document.getElementById('pages').value;
     const read = document.getElementById('read').checked;
+    const rating = document.getElementById('rating').value;
 
-    addBookToLibrary(title, author, pages, read);
+    addBookToLibrary(title, author, pages, read,rating);
 
     displayBooks();
 
@@ -72,3 +83,17 @@ bookForm.addEventListener('submit', (event) => {
 cancelBtn.addEventListener('click', () => {
     bookDialog.close()
 })
+
+
+function setupRemoveButton(){
+    const removeButtons = document.querySelectorAll('.remove-btn');
+
+    removeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const bookId = button.dataset.id;
+            const bookIndex = myLibrary.findIndex(book => book.id === bookId);
+            myLibrary.splice(bookIndex, 1);
+            displayBooks();
+        });
+    });
+}
